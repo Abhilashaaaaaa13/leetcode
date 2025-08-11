@@ -1,16 +1,19 @@
 class Solution {
 public:
-string reorder(int n){
-    string s = to_string( n);
-    sort(s.begin(),s.end());
-    return s;
+vector<int>getvecount(int n){
+    vector<int>vec(10,0);
+    while(n){
+        vec[n%10]++;
+        n/=10;
+    }
+    return vec;
 }
     bool reorderedPowerOf2(int n) {
-        string s = reorder(n);
-        for(int p=0;p<=29;p++){
-            if(s==reorder(1 << p)){
-                return true;
-            }
+        vector<int>input = getvecount(n);
+        for(int p =0 ; p<=29; p++){
+        if(input == getvecount(1<<p)){
+            return true;
+        }
         }
         return false;
     }
