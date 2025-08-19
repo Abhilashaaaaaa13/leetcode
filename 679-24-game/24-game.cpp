@@ -1,46 +1,49 @@
 class Solution {
-    const double EPS = 1e-6;
-
 public:
-    bool judgePoint24(vector<int>& cards) {
-         vector<double> nums;
-        for (int n : cards) nums.push_back((double)n);
-        return dfs(nums);
-    }
-
-private:
-    bool dfs(vector<double>& nums) {
-        if (nums.size() == 1) {
-            return fabs(nums[0] - 24.0) < EPS;
+double epsilon =0.1;
+  bool solve(vector<double>&cards){
+if(cards.size()==1){
+    return abs(cards[0]-24)<=epsilon;
+}
+//pick 2 numbers
+for(int i =0 ;i<cards.size();i++){
+    for(int j=0;j<cards.size();j++){
+        if(i==j){
+            continue;
         }
 
-        for (int i = 0; i < nums.size(); i++) {
-            for (int j = 0; j < nums.size(); j++) {
-                if (i == j) continue;
-
-                vector<double> next;
-                for (int k = 0; k < nums.size(); k++) {
-                    if (k != i && k != j) next.push_back(nums[k]);
-                }
-
-                for (double val : compute(nums[i], nums[j])) {
-                    next.push_back(val);
-                    if (dfs(next)) return true;
-                    next.pop_back();
-                }
+        vector<double>temp;
+        for(int k=0;k<cards.size();k++){
+            if(k!=i && k!=j){
+                temp.push_back(cards[k]);
             }
-        }
-        return false;
-    }
 
-    vector<double> compute(double a, double b) {
-        vector<double> res;
-        res.push_back(a + b);
-        res.push_back(a - b);
-        res.push_back(b - a);
-        res.push_back(a * b);
-        if (fabs(b) > EPS) res.push_back(a / b);
-        if (fabs(a) > EPS) res.push_back(b / a);
-        return res;
+        }
+        double a = cards[i];
+        double b = cards[j];
+        vector<double>operations = {a+b,a-b,b-a,a*b};
+        if(abs(b)>0.0){
+            operations.push_back(a/b);
+        }
+        if(abs(a)>0.0){
+            operations.push_back(b/a);
+        }
+        for(double val : operations){
+         temp.push_back(val);
+         if(solve(temp)==true){
+            return true;
+         }
+         temp.pop_back();
+        }
+    }
+}
+return false;
+  }
+    bool judgePoint24(vector<int>& cards) {
+        vector<double>nums;
+        for(int i=0;i<cards.size();i++){
+            nums.push_back(1.0*cards[i]);
+        }
+        return solve(nums);
     }
 };
