@@ -1,30 +1,40 @@
 class Solution {
 public:
-int dfs(vector<vector<int>>& grid, int i , int j){
+vector<vector<int>>directions = {{-1,0},{1,0},{0,-1},{0,1}};
+int bfs(vector<vector<int>>& grid, int i , int j){
     int m = grid.size();
     int n = grid[0].size();
-    if(i<0 || j< 0 || i>=m || j>=n || grid[i][j]==0)return 0;
-    grid[i][j]=0;
-    int maxarea = 1;
-    maxarea += dfs(grid,i+1,j);
-    maxarea += dfs(grid,i-1,j);
-    maxarea += dfs(grid,i,j+1);
-    maxarea += dfs(grid,i,j-1);
-    return maxarea;
+    queue<pair<int,int>>q;
+    q.push({i,j});
+    grid[i][j] =0;
+    int area = 1;
+    while(!q.empty()){
+        auto[x,y] = q.front();
+        q.pop();
+        for(vector<int>dir:directions){
+            int newx = x+ dir[0];
+            int newy = y+ dir[1];
+            if(newx>=0 && newy>=0 && newx<m && newy<n && grid[newx][newy]==1){
+                grid[newx][newy]=0;
+                q.push({newx,newy});
+                area++;
+            }
+        }
+    }
+    return area;
 }
     int maxAreaOfIsland(vector<vector<int>>& grid) {
         int m = grid.size();
         int n = grid[0].size();
-        int area =0;
-        for(int i =0 ;i<m ;i++){
+        int maxarea =0;
+        for(int i =0 ;i<m ; i++){
             for(int j =0 ;j<n;j++){
                 if(grid[i][j]==1){
-                    
-                   int maxarea =  dfs(grid,i,j);
-                   area = max(maxarea,area);
+                    int area = bfs(grid,i,j);
+                    maxarea = max(area,maxarea);
                 }
             }
         }
-        return area;
+        return maxarea;
     }
 };
