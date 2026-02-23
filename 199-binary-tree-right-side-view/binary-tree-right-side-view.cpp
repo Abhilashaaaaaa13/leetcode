@@ -20,12 +20,14 @@ public:
             ans.push_back(q.front()->val);
             int n = q.size();
             while(n--){
-          TreeNode*temp = q.front();
-          q.pop();
-          if(temp->right)
-          q.push(temp->right);
-          if(temp->left)
-          q.push(temp->left);
+                TreeNode* temp = q.front();
+                q.pop();
+                if(temp->right){
+                    q.push(temp->right);
+                }
+                if(temp->left){
+                    q.push(temp->left);
+                }
             }
         }
         return ans;
